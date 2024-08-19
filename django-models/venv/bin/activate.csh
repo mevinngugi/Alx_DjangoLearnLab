@@ -9,7 +9,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/mevinngugi/TheForge/ALX-BE-Week9/Alx_DjangoLearnLab/0x1.Introduction_ to_ Django/venv"
+setenv VIRTUAL_ENV "/Users/mevinngugi/TheForge/ALX-BE-Week10/Alx_DjangoLearnLab/django-models/venv"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"
