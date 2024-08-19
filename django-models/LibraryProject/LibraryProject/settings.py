@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
+<<<<<<< HEAD
     'relationship_app.apps.RelationshipAppConfig',
+=======
+>>>>>>> parent of 31b5593 (Add relationship_app. Register relationship_app)
 ]
 
 MIDDLEWARE = [
