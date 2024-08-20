@@ -22,7 +22,8 @@ author = Author.objects.get(name="James Bond")
 books_by_author = Book.objects.filter(author=author)
 
 # List all books in a library
-books_in_library = library_name.books
+library_name = Library.objects.get(name=library_name)
+books_in_library = library_name.books.all()
 
 # Retrieve the librarian for a library
 librarian_name.library
