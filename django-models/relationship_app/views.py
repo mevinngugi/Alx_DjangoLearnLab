@@ -14,13 +14,13 @@ def index(request):
 def detail(request, book_id):
     return HttpResponse(f"You'are looking at book {book_id}")
 
-def book_list(request):
+def list_books(request):
     """Retrieves all books and renders a template displaying the list."""
     books = Book.objects.all()  # Fetch all book instances from the database
     
-    context = {'book_list': books}  # Create a context dictionary with book list
+    context = {'list_books': books}  # Create a context dictionary with book list
 
-    return render(request, 'relationship_app/book_list.html', context)
+    return render(request, 'relationship_app/list_books.html', context)
     #template = loader.get_template("relationship_app/book_list.html")
     # return HttpResponse(template.render(context, request))
 
