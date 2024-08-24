@@ -8,6 +8,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
 #for checker
+# Since I passed in the template name in the login url,
+# I don't need to create a class for the below import.
+#I will leave it here for the checker though
 from django.contrib.auth import login
 
 from .models import Book
