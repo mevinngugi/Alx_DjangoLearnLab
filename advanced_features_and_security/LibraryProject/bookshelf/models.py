@@ -8,6 +8,14 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField()
 
+    class Meta:
+        permissions = [
+            ("Add", "can_create"),
+            ("View", "can_view"),
+            ("Edit", "can_edit"),
+            ("Delete", "can_delete"),
+        ]
+
 # Week 11 - CustomUser Model
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, date_of_birth=None, profile_photo=None, password=None, **extra_fields):
