@@ -65,11 +65,11 @@ def register(request):
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {"form": form})
 
-@user_passes_test(lambda user: user.userprofile.role == "Admin")
+@userpassestest(lambda user: user.userprofile.role == "Admin")
 def admin_view(request):
     return render(request, "relationship_app/admin_view.html")
 
-@user_passes_test(lambda user: user.userprofile.role == "Librarian")
+@userpassestest(lambda user: user.userprofile.role == "Librarian")
 def librarian_view(request):
     if not request.user.is_authenticated:
         # Redirect to login page or show an error message
@@ -77,6 +77,6 @@ def librarian_view(request):
     # Logged-in librarian view logic
     return render(request, "relationship_app/librarian_view.html")
 
-@user_passes_test(lambda user: user.userprofile.role == "Member")
+@userpassestest(lambda user: user.userprofile.role == "Member")
 def member_view(request):
     return render(request, "relationship_app/members_view.html")
