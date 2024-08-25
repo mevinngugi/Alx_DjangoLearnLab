@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 #from django.template import loader
 from django.views.generic import TemplateView, CreateView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.forms import ChoiceField
 
 from django.contrib.auth.decorators import user_passes_test
 
@@ -17,6 +18,7 @@ from django.contrib.auth import login
 
 from .models import Book
 from .models import Library
+from .models import UserProfile
 # Create your views here.
 
 def index(request):
@@ -58,19 +60,23 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect ("index")
+            return redirect ("login")
     else:
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {"form": form})
 
-@user_passes_test(lambda user: user.profile.role == "Admin")
+@user_passes_test(lambda user: user.userprofile.role == "Admin")
 def admin_view(request):
-    return HttpResponse("This view is for Admins only!!")
+    return render(request, "relationship_app/admin_view.html")
 
-@user_passes_test(lambda user: user.profile.role == "Librarian")
+@user_passes_test(lambda user: user.userprofile.role == "Librarian")
 def librarian_view(request):
-    return HttpResponse("View for Librarians")
+    if not request.user.is_authenticated:
+        # Redirect to login page or show an error message
+        return redirect("login")
+    # Logged-in librarian view logic
+    return render(request, "relationship_app/librarian_view.html")
 
-@user_passes_test(lambda user: user.profile.role == "Member")
+@user_passes_test(lambda user: user.userprofile.role == "Member")
 def member_view(request):
-    return HttpResponse("This is a view for members")
+    return render(request, "relationship_app/members_view.html")
