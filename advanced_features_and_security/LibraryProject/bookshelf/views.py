@@ -10,8 +10,8 @@ def add_book(request):
     return render(request, "bookshelf/add_book.html")
 
 @permission_required("bookshelf.can_view", raise_exception=True)
-def list_book(request):
-    return render(request, "bookshelf/list_book.html")
+def book_list(request):
+    return render(request, "bookshelf/book_list.html")
 
 @permission_required("bookshelf.can_edit", raise_exception=True)
 def edit_book(request):
