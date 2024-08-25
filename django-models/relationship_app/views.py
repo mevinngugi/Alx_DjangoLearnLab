@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.forms import ChoiceField
 
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, permission_required 
 
 #for checker
 # Since I passed in the template name in the login url,
@@ -65,11 +65,11 @@ def register(request):
         form = UserCreationForm()
     return render(request, "relationship_app/register.html", {"form": form})
 
-@userpassestest(lambda user: user.userprofile.role == "Admin")
+@user_passes_test(lambda user: user.userprofile.role == "Admin")
 def admin_view(request):
     return render(request, "relationship_app/admin_view.html")
 
-@userpassestest(lambda user: user.userprofile.role == "Librarian")
+@user_passes_test(lambda user: user.userprofile.role == "Librarian")
 def librarian_view(request):
     if not request.user.is_authenticated:
         # Redirect to login page or show an error message
@@ -80,3 +80,15 @@ def librarian_view(request):
 @user_passes_test(lambda user: user.userprofile.role == "Member")
 def member_view(request):
     return render(request, "relationship_app/member_view.html")
+
+@permission_required("relationship_app.can_add_book", raise_exception=True)
+def add_book(request):
+    return render(request, "relationship_app/add_book.html")
+
+@permission_required("relationship_app.can_change_book", raise_exception=True)
+def edit_book(request):
+    return render(request, "relationship_app/edit_book.html")
+
+@permission_required("relationship_app.can_delete_book", raise_exception=True)
+def delete_book(request):
+    return render(request, "relationship_app/delete_book.html")
