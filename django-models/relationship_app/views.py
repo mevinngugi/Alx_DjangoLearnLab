@@ -77,6 +77,6 @@ def librarian_view(request):
     # Logged-in librarian view logic
     return render(request, "relationship_app/librarian_view.html")
 
-@userpassestest(lambda user: user.userprofile.role == "Member")
+@user_passes_test(lambda user: user.userprofile.role == "Member")
 def member_view(request):
     return render(request, "relationship_app/members_view.html")
