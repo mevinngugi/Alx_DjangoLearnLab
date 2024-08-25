@@ -7,6 +7,8 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
+from django.contrib.auth.decorators import user_passes_test
+
 #for checker
 # Since I passed in the template name in the login url,
 # I don't need to create a class for the below import.
@@ -34,8 +36,9 @@ def list_books(request):
     # return HttpResponse(template.render(context, request))
 
 # For the checker
-def get_user_creation_form():
-    return UserCreationForm()
+# def get_user_creation_form():
+#     return UserCreationForm()
+#Changed the register view from a class to a function to not have issues with UserCreationForm
 
 class AboutView(TemplateView):
     template_name = "relationship_app/about.html"
@@ -44,7 +47,30 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = "relationship_app/library_detail.html"
 
-class register(CreateView):
-    form_class = get_user_creation_form
-    success_url = reverse_lazy("login")
-    template_name = "relationship_app/register.html"
+# class register(CreateView):
+#     form_class = get_user_creation_form
+#     success_url = reverse_lazy("login")
+#     template_name = "relationship_app/register.html"
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect ("index")
+    else:
+        form = UserCreationForm()
+    return render(request, "relationship_app/register.html", {"form": form})
+
+@user_passes_test(lambda user: user.profile.role == "Admin")
+def admin_view(request):
+    return HttpResponse("This view is for Admins only!!")
+
+@user_passes_test(lambda user: user.profile.role == "Librarian")
+def librarian_view(request):
+    return HttpResponse("View for Librarians")
+
+@user_passes_test(lambda user: user.profile.role == "Member")
+def member_view(request):
+    return HttpResponse("This is a view for members")
