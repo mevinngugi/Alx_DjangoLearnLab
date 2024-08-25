@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 ]
 
 #AUTH_USER_MODEL = "relationship_app.CustomUser"
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'library_project2',
+        'NAME': 'library_project3',
         'USER': 'root',
         'PASSWORD': '5z&^ZwqWKd#9H6',
         'HOST': '127.0.0.1',
