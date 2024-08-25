@@ -1,16 +1,14 @@
-from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import CustomUser
+from .models import Book
 
+class ExampleForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ["title", "author", "publication_year"]
 
-class CustomUserCreationForm(UserCreationForm):
-    ROLES = [
-        ("creator", "Creator"),
-        ("reader", "Reader"),
-    ]
-    role = forms.ChoiceField(choices=ROLES, required=True)
-    class Meta(UserCreationForm.Meta):
-        model = CustomUser
-        fields = UserCreationForm.Meta.fields + (
-            "date_of_birth", "profile_photo"
-        )
+    def clean_title(self):
+        title = self.cleaned_data.get("title")
+        # Prevent empty title
+        if not title:
+            raise forms.ValidationError("Title can not be empty.")
+        return title

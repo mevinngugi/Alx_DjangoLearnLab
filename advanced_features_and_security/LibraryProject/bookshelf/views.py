@@ -1,13 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import permission_required
 
-#for register view
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.models import Group
-from .forms import CustomUserCreationForm
-
 from .models import Book
+from .forms import ExampleForm
 # Create your views here.
 
 # Did not create the html files 
@@ -27,26 +22,12 @@ def edit_book(request):
 def delete_book(request):
     return render(request, "bookshelf/delete_book.html")
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.models import Group
-from .forms import CustomUserCreationForm
-
 
 def register(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            role = form.cleaned_data.get("role")
-            if role == "creator":
-                creator_group = Group.objects.get(name="Creator")
-                user.groups.add(creator_group)
-            elif role == "reader":
-                creator_group = Group.objects.get(name="Reader")
-                user.groups.add(creator_group)
-            login(request, user)
-            return redirect("list_posts")
+            form.save()
     else:
-        form = CustomUserCreationForm()
-    return render(request, "bookshelf/register.html", {"form": form})
+        form = ExampleForm()
+    return render(request, "bookshelf/form_example.html", {"form": form})
