@@ -23,7 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%^_9-mf9-8y_t8kwc=_e0&exrdn+e+!*(nw=+#h%m6(5gug1jx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+SECURE_BROWSER_XSS_FILTER = True  # Enables the X-XSS-Protection header
+X_FRAME_OPTIONS = 'DENY'  # Prevents clickjacking by disallowing your site in iframes
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME type sniffing
+CSRF_COOKIE_SECURE = True  # Ensures the CSRF cookie is only sent over HTTPS
+SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+CSP_DEFAULT_SRC = ("'self'",)  # Only allow resources from your own domain
+CSP_SCRIPT_SRC = ("'self'", 'https://trustedscripts.com')  # Example to allow scripts from your domain and trusted sources
+CSP_STYLE_SRC = ("'self'", 'https://trustedstyles.com')  # Example to allow styles from your domain and trusted sources
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
     'relationship_app',
+    'csp',
 ]
 
 #AUTH_USER_MODEL = "relationship_app.CustomUser"
@@ -53,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
