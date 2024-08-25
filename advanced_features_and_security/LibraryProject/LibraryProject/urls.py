@@ -16,8 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-import sys
-sys.path.insert(0, '/Users/mevinngugi/TheForge/ALX-BE-Week10/Alx_DjangoLearnLab/django-models/')
+
 urlpatterns = [
     #path('bookshelf/', include("bookshelf.urls")),
     path("relationship_app/", include("relationship_app.urls")),

@@ -29,8 +29,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-import sys
-sys.path.insert(0, '/Users/mevinngugi/TheForge/ALX-BE-Week10/Alx_DjangoLearnLab/django-models/')
+# import sys
+# sys.path.insert(0, '/Users/mevinngugi/TheForge/ALX-BE-Week11/Alx_DjangoLearnLab/advanced_features_and_security/')
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship_app.apps.RelationshipAppConfig',
+    'relationship_app',
 ]
+
+#AUTH_USER_MODEL = "relationship_app.CustomUser"
+AUTH_USER_MODEL = 'relationship_app.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +82,7 @@ WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'library_project',
+        'NAME': 'library_project2',
         'USER': 'root',
         'PASSWORD': '5z&^ZwqWKd#9H6',
         'HOST': '127.0.0.1',
