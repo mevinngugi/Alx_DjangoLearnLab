@@ -8,7 +8,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.forms import ChoiceField
 
-from django.contrib.auth.decorators import user_passes_test, permission_required 
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 #for checker
 # Since I passed in the template name in the login url,
