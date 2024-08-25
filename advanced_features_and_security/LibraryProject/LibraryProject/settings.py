@@ -22,6 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-%^_9-mf9-8y_t8kwc=_e0&exrdn+e+!*(nw=+#h%m6(5gug1jx'
 
+
+#####################################################
+# When Deploying to production, turn these on       #
+#####################################################
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 SECURE_BROWSER_XSS_FILTER = True  # Enables the X-XSS-Protection header
@@ -40,6 +44,16 @@ SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
 SECURE_HSTS_PRELOAD = True  # Allow the site to be preloaded in browsers' HSTS lists
+
+# Ensure that Django can detect HTTPS connections behind a proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# This setting ensures that the 'X-Forwarded-Proto' header is used to determine the connection's security
+SECURE_SSL_REDIRECT = True
+
+#####################################################
+# End of prod configs                               #
+#####################################################
 
 ALLOWED_HOSTS = []
 
