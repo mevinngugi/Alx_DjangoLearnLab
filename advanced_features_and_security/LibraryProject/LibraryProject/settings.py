@@ -33,6 +33,14 @@ CSP_DEFAULT_SRC = ("'self'",)  # Only allow resources from your own domain
 CSP_SCRIPT_SRC = ("'self'", 'https://trustedscripts.com')  # Example to allow scripts from your domain and trusted sources
 CSP_STYLE_SRC = ("'self'", 'https://trustedstyles.com')  # Example to allow styles from your domain and trusted sources
 
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow the site to be preloaded in browsers' HSTS lists
+
 ALLOWED_HOSTS = []
 
 
