@@ -23,8 +23,8 @@ class BookDetail(generics.RetrieveAPIView):
     serializer_class = BookSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
-    #authentication_classes = [TokenAuthentication]
-    #permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -36,8 +36,8 @@ class BookViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(title__contains=title_filter)
         return queryset
         
-    # def get(self, request):
-    #     # Only authenticated users can view the list from model
-    #     queryset = Book.objects.all()
-    #     serializer_class = BookSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+    def get(self, request):
+        # Only authenticated users can view the list from model
+        queryset = Book.objects.all()
+        serializer_class = BookSerializer(queryset, many=True)
+        return Response(serializer.data)
