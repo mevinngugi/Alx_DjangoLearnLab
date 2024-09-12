@@ -23,7 +23,7 @@ class BookDetail(generics.RetrieveAPIView):
     serializer_class = BookSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
-    authentication_classes = [TokenAuthentication]
+    #authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     queryset = Book.objects.all()
