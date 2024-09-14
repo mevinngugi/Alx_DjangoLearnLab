@@ -1,13 +1,18 @@
 from django.shortcuts import render
 from rest_framework import generics, viewsets
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated,  IsAdminUser
+#from rest_framework.authentication import TokenAuthentication
+#from rest_framework.permissions import IsAuthenticated,  IsAdminUser
 from .models import Book
 from .serializers import BookSerializer
 from .permissions import IsAuthorOrReadOnly
 
 # Create your views here.
-class BookList(generics.ListAPIView):
+from django.contrib.auth.mixins import LoginRequiredMixin
+class BookList(LoginRequiredMixin, generics.ListAPIView):
+    
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
