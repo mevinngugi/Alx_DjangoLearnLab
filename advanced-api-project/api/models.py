@@ -16,8 +16,9 @@ class Author(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=200, null=False, blank=False)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
+    # author is related to a book the the author id. related_name='books' gives use the ability to return all the books by a certain author 
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
     publication_year = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.title} by {self.author} published in {publication_year}"
+        return f'{self.title} by {self.author} published in {publication_year}'
