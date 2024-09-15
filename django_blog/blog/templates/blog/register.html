@@ -5,8 +5,9 @@
 
 {% block content %}
 <h1>Register</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+      <!-- Efficient way to render a simple and well-structured form -->
     {{ form.as_p }}
     <button type="submit">Register</button>
 </form>

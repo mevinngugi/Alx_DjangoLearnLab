@@ -5,9 +5,10 @@
 
 {% block content %}
 <h2>Log In</h2>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form }}
+    <!-- Efficient way to render a simple and well-structured form -->
+  {{ form.as_p }}
   <button type="submit">Log In</button>
 </form>
 {% endblock %}

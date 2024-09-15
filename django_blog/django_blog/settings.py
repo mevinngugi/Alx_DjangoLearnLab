@@ -22,8 +22,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-q*9n&4uwx(x09m4t%jmfaapmh8vu883^6%q1@%9f_tv$e(3xe%'
 
+#####################################################
+# When Deploying to production, turn these on       #
+#####################################################
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True  # Enables the X-XSS-Protection header
+    X_FRAME_OPTIONS = 'DENY'  # Prevents clickjacking by disallowing your site in iframes
+    SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME type sniffing
+    CSRF_COOKIE_SECURE = True  # Ensures the CSRF cookie is only sent over HTTPS
+    SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+    SECURE_HSTS_PRELOAD = True  # Preload site in browsers' HSTS lists
+    SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+    CSP_DEFAULT_SRC = ("'self'",)  # Only allow resources from your own domain
+    CSP_SCRIPT_SRC = ("'self'", 'https://trustedscripts.com')
+    CSP_STYLE_SRC = ("'self'", 'https://trustedstyles.com')
+else:
+    # Use HTTP settings for local development
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    SECURE_HSTS_SECONDS = 0  # No HSTS during development
+
+#####################################################
+# End of prod configs                               #
+#####################################################
+
+
 
 ALLOWED_HOSTS = []
 
@@ -42,13 +71,20 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Required for sessions
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Required for authentication
+    'django.contrib.messages.middleware.MessageMiddleware',  # Required for messages
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Optionally add the CSPMiddleware back when you're ready
+if not DEBUG:
+    MIDDLEWARE += [
+        'csp.middleware.CSPMiddleware',
+    ]
+
 
 ROOT_URLCONF = 'django_blog.urls'
 
