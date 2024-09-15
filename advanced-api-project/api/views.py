@@ -5,6 +5,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, DjangoModelPermissions
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 
@@ -13,7 +14,20 @@ class AuthorList(generics.ListCreateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
-class ListView(generics.ListAPIView):
+class BookListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filterset_fields = ['title', 'author', 'publication_year']
+    search_fields = ['title', 'author']
+    ordering_fields = ['title', 'publication_year']
+    # This will be the default ordering filter
+    ordering = ['title']
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs['pk'])
+
+class BookDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -21,15 +35,7 @@ class ListView(generics.ListAPIView):
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs['pk'])
 
-class DetailView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-
-    def get_object(self):
-        return get_object_or_404(self.get_queryset(), pk=self.kwargs['pk'])
-
-class CreateView(generics.CreateAPIView):
+class BookCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -48,7 +54,7 @@ class CreateView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UpdateView(generics.UpdateAPIView):
+class BookUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -69,7 +75,7 @@ class UpdateView(generics.UpdateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
-class DeleteView(generics.DestroyAPIView):
+class BookDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Book.objects.all()
     serializer_class = BookSerializer

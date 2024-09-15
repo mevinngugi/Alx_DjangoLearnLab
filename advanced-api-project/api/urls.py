@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AuthorList, ListView, DetailView, CreateView, UpdateView, DeleteView
+from .views import AuthorList, BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.base import TemplateView
 
@@ -13,19 +13,19 @@ urlpatterns = [
 
     # API urls for Author, Book AuthorList
     path('authors/', AuthorList.as_view(), name='author'),
-    path('books/', ListView.as_view(), name='books'),
+    path('books/', BookListView.as_view(), name='books'),
 
     # API URLs for the Book model to handle CRUD operations
     # DetailView
-    path('books/<int:pk>/', DetailView.as_view(), name='book_detail'),
+    path('books/<int:pk>/', BookDetailView.as_view(), name='book_detail'),
 
     # CreateView
-    path('books/create/', CreateView.as_view(), name='new_book'),
+    path('books/create/', BookCreateView.as_view(), name='new_book'),
 
     # UpdateView
-    path('books/update/<int:pk>/', UpdateView.as_view(), name='update_book'),
+    path('books/update/<int:pk>/', BookUpdateView.as_view(), name='update_book'),
 
     # DeleteView
-    path('books/delete/<int:pk>/', DeleteView.as_view(), name='delete_book'),
+    path('books/delete/<int:pk>/', BookDeleteView.as_view(), name='delete_book'),
 
 ]
