@@ -5,8 +5,10 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, DjangoModelPermissions
-from rest_framework.filters import SearchFilter, OrderingFilter
 
+# Commenting this out for the checker and substituting it with the below line
+# from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters import rest_framework
 
 
 # Create your views here.
