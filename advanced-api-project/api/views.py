@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Author, Book
-from .serializer import AuthorSerializer, BookSerializer
+from .serializers import AuthorSerializer, BookSerializer
 from rest_framework import generics
 
 # Create your views here.
