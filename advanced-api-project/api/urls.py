@@ -20,12 +20,12 @@ urlpatterns = [
     path('books/<int:pk>/', DeleteView.as_view(), name='book_detail'),
 
     # CreateView
-    path('new_book/', CreateView.as_view(), name='new_book'),
+    path('books/create/', CreateView.as_view(), name='new_book'),
 
     # UpdateView
-    path('update_book/<int:pk>/', UpdateView.as_view(), name='update_book'),
+    path('books/update/<int:pk>/', UpdateView.as_view(), name='update_book'),
 
     # DeleteView
-    path('delete_book/<int:pk>/', DeleteView.as_view(), name='delete_book'),
+    path('books/delete/<int:pk>/', DeleteView.as_view(), name='delete_book'),
 
 ]
