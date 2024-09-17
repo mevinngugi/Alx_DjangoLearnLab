@@ -5,7 +5,7 @@ from .models import Author, Book
 from django.contrib.auth.models import User
 import json
 
-class TestViews(TestCase):
+class BookAPITestCase(TestCase):
 
     def setUp(self):
         self.client = APIClient()
