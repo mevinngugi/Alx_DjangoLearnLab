@@ -8,26 +8,41 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 
 # Commenting this out for the checker and substituting it with the below line
 # from rest_framework.filters import SearchFilter, OrderingFilter
-from django_filters import rest_framework
+#from django_filters import rest_framework
 
+# Using the below import for the custom filter. 
+from django_filters import rest_framework as advanced_filters
 
 # Create your views here.
 class AuthorList(generics.ListCreateAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
+# Custom filter that returns partial search on title and author name
+class BookListFilter(advanced_filters.FilterSet):
+    title = advanced_filters.CharFilter(lookup_expr='icontains')
+    author = advanced_filters.CharFilter(field_name='author__name', lookup_expr='icontains')
+
+    class Meta:
+        model = Book
+        fields = ('title', 'author', 'publication_year')
+
+
 class BookListView(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filterset_class = BookListFilter
 
     # Filters for filtering, searching, and ordering
-    filter_backends = [filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['title', 'author', 'publication_year']
-    search_fields = ['title', 'author']
+    #filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    # Commenting out filter_backends because they are added in settings.py. Remember to override the filters in views that you don't the user to search or order
+
+    filterset_fields = ['title', 'author__name', 'publication_year']
+    search_fields = ['title', 'author__name']
     ordering_fields = ['title', 'publication_year']
     # This will be the default ordering filter
-    ordering = ['title']
+    #ordering = ['title']
 
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs['pk'])
