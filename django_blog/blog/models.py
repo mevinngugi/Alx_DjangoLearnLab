@@ -30,4 +30,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
+    # If user does not have a profile, this will throw an error on login as it tries to update last logged in.
     instance.profile.save()
