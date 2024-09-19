@@ -25,7 +25,7 @@ class BookSerializer(serializers.ModelSerializer):
         if data['publication_year'] > timezone.now():
             raise serializers.ValidationError('The year of publication can not be a future date')
         # Making sure all book titles are saved in title case 
-        data['title'].title()
+        data['title'] = data['title'].title()
         return data
 
 

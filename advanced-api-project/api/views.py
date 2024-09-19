@@ -66,12 +66,12 @@ class BookCreateView(generics.CreateAPIView):
             # Custom Validation to check if there is a record of book title by the author already created 
             passed_title = serializer.validated_data['title']
             passed_author = serializer.validated_data['author']
-            filter_for_existing_book = Book.objects.filter(title=passed_title.title(), author=passed_author).first()
+            filter_for_existing_book = Book.objects.filter(title=passed_title.title(), author=passed_author).exists()
             if filter_for_existing_book:
                 raise ValidationError(f'The book {passed_title.title()} by {passed_author} already exists.')
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BookUpdateView(generics.UpdateAPIView):
@@ -83,17 +83,19 @@ class BookUpdateView(generics.UpdateAPIView):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs['pk'])
 
     def put(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        #serializer = self.get_serializer(data=request.data)
+        book = self.get_object()
+        serializer = self.get_serializer(book, data=request.data)
         if serializer.is_valid():
             # Custom Validation to check if there is a record of book title by the author already created 
             passed_title = serializer.validated_data['title']
             passed_author = serializer.validated_data['author']
-            filter_for_existing_book = Book.objects.filter(title=passed_title.title(), author=passed_author).first()
+            filter_for_existing_book = Book.objects.filter(title=passed_title.title(), author=passed_author).exists()
             if filter_for_existing_book:
                 raise ValidationError(f'The book {passed_title.title()} by {passed_author} already exists.')
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BookDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
