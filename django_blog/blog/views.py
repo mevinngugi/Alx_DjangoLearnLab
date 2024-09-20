@@ -1,8 +1,11 @@
-from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm
+from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, PostCreateForm, PostUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Post
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 def register(request):
@@ -18,9 +21,6 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'blog/register.html', {'form': form})
-
-def profile(request):
-    return render(request, 'blog/profile.html')
 
 @login_required
 def profile(request):
@@ -40,3 +40,50 @@ def profile(request):
         'p_form': p_form
     }
     return render(request, 'registration/profile.html', context)
+
+
+class PostListView(ListView):
+    model = Post
+
+
+class PostDetailView(DetailView):
+    model = Post
+
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostCreateForm
+    success_url = reverse_lazy('posts')
+
+    # Ensure that we bind the logged in user id to post.author
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    form_class = PostUpdateForm
+    success_url = reverse_lazy('posts')
+    template_name = 'blog/post_form_update.html'
+
+    def test_func(self):
+        post = self.get_object()
+        # Only allow super user and the owner of the post to edit post
+        if self.request.user.is_superuser:
+            return True
+        elif self.request.user.id == post.author_id:
+            return True
+
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('posts')
+
+    def test_func(self):
+        post = self.get_object()
+        # Only allow super user and the owner of the post to delete post
+        if self.request.user.is_superuser:
+            return True
+        elif self.request.user.id == post.author_id:
+            return True

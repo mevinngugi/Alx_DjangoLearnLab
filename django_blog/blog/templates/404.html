@@ -1,0 +1,10 @@
+<!-- templates/404.html -->
+{% extends "blog/base.html" %}
+
+{% block title %}404 Page{% endblock %}
+
+{% block content %}
+<h1>404!!</h1>
+<h1>POST NOT FOUND!! SHOOO...!! GO AWAY!!</h1>
+<a href="{% url 'posts' %}">Log In</a>
+{% endblock %}

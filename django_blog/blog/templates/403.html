@@ -1,0 +1,10 @@
+<!-- templates/403.html -->
+{% extends "blog/base.html" %}
+
+{% block title %}403 Page{% endblock %}
+
+{% block content %}
+<h1>403!!</h1>
+<h1>Sir...!! You do not have permission to view this page!!</h1> <h2>SHOOO...!! GO AWAY!!</h2>
+<a href="{% url 'posts' %}"> Back to all blog posts</a>
+{% endblock %}

@@ -1,8 +1,20 @@
-<!-- templates/registration/posts.html -->
+<!-- templates/blog/posts.html -->
 {% extends "blog/base.html" %}
 
-{% block title %}Logout{% endblock %}
+{% block title %}Posts{% endblock %}
 
 {% block content %}
-<h1>A list of all the blog posts</h1>
+    <div class="content">
+        <h2>A list of all the blog posts</h2>
+            <ul>
+                {% for post in post_list %}
+                    <li class="content">
+                        <a href="{% url 'post_detail' post.id %}">
+                            {{ post.title }} by {{ post.author }} on {{ post.published_date }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        <a href="{% url 'post_new'%}"> Create a new blog post</a>
+    </div>
 {% endblock %}

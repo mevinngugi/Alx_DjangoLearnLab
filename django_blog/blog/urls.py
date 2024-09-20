@@ -9,15 +9,26 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='blog/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='registration/logout.html'), name="logout"),
 
-    # Redirects to home after login
-    path('home/', TemplateView.as_view(template_name='blog/home.html'), name='home'),
-
     #Nav bar redirects
-    path('posts/', TemplateView.as_view(template_name='blog/posts.html'), name='posts'),
+    path('home/', TemplateView.as_view(template_name='blog/home.html'), name='home'),
+    # Changing from TemplateView to a generic view in views.py
+    #path('posts/', TemplateView.as_view(template_name='blog/posts.html'), name='posts'),
+    path('posts/', views.PostListView.as_view(template_name='blog/posts.html'), name='posts'),
     # Using a function view for register because of the custom UserCreationForm 
     path('register/', views.register, name='register'),
-
     # Profile View
     path('profile/', views.profile, name='profile'),
+
+    # Detail Post View
+    path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
+
+    # Create Post View
+    path('posts/new/', views.PostCreateView.as_view(), name='post_new'),
+
+    # Update Post View
+    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),
+
+    # Delete Post View
+    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
 
 ]

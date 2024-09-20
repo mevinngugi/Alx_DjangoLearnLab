@@ -1,0 +1,21 @@
+<!-- templates/blog/post_form_update.html -->
+{% extends "blog/base.html" %}
+
+{% block title %}Update Post{% endblock %}
+
+{% block content %}
+    <div class="content">
+
+        <section class="content">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit"> Update Post </button>
+            </form>
+        </section>
+
+        <section class="content">
+            <a href="{% url 'posts'%}"> Back to all blog posts </a>
+        </section>
+    </div>
+{% endblock %}
