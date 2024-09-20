@@ -12,9 +12,19 @@
                 <small> Posted by {{ post.author }} on {{ post.published_date }}</small>
         </section>
 
+        <h3>Comments</h3>
         <section class="content">
-            <a href="{% url 'posts'%}"> Back to all blog posts</a>
+            {% for comment in comments %}
+                <section class="content">
+                    <p>{{ comment.content }}</p>
+                    <small>By {{ comment.author }} on {{ comment.created_at }}</small>
+                </section>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
         </section>
-        
+
+        <a href="{% url 'posts'%}"> Back to all blog posts</a>
+
     </div>
 {% endblock %}
