@@ -1,0 +1,22 @@
+<!-- templates/blog/comment_form.html -->
+{% extends "blog/base.html" %}
+
+{% block title %}Add Comment{% endblock %}
+
+{% block content %}
+    <!-- Include the post details from the partial template -->
+    {% include "blog/_post_detail_content.html" %}
+
+    <!-- Add the comment form below the post details -->
+    <div class="content">
+        <h3>Leave a comment</h3>
+        <section class="content">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Post Comment</button>
+            </form>
+        </section>
+    </div>
+
+{% endblock %}

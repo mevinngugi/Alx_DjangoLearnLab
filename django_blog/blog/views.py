@@ -1,11 +1,13 @@
-from .forms import CustomUserCreationForm, UserUpdateForm, ProfileUpdateForm, PostCreateForm, PostUpdateForm
+# This import is starting to look ugly. Update to import all
+from .forms import *
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Comment
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
 
 # Create your views here.
 def register(request):
@@ -64,6 +66,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     # Ensure that we bind the logged in user id to post.author
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.success(self.request, 'Post created successfully')
         return super().form_valid(form)
 
 
@@ -71,6 +74,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostUpdateForm
     success_url = reverse_lazy('posts')
+    # Overriding the template because by default it was picking the post create form
     template_name = 'blog/post_form_update.html'
 
     def test_func(self):
@@ -93,3 +97,32 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         elif self.request.user.id == post.author_id:
             return True
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # post_id as set in the urls
+        post = get_object_or_404(Post, pk=self.kwargs['post_id'])
+        # Make the post object accessible in the html form
+        context['post'] = post
+        # Get all the comment related to the post
+        context['comments'] = Comment.objects.filter(post=post)
+        return context
+
+    def form_valid(self, form):
+        # Get the current post if not 404
+        post_id = self.kwargs['post_id']
+        post = get_object_or_404(Post, pk=post_id)
+        # Connect the comment to the post 
+        form.instance.post = post
+        # Connect the comment to the logged in author
+        form.instance.author = self.request.user
+        messages.success(self.request, 'Comment saved successfully')
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})

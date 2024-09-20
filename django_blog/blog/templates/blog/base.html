@@ -21,6 +21,12 @@
     </header>
 
     <div class="content">
+        {% if messages %}
+                {% for message in messages %}
+                        {{ message }}
+                {% endfor %}
+        {% endif %}
+
         {% block content %}
         <!-- Page-specific content goes here -->
         {% endblock %}
