@@ -105,8 +105,8 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # post_id as set in the urls
-        post = get_object_or_404(Post, pk=self.kwargs['post_id'])
+        # pk as set in the urls
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
         # Make the post object accessible in the html form
         context['post'] = post
         # Get all the comment related to the post
@@ -115,7 +115,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         # Get the current post if not 404
-        post_id = self.kwargs['post_id']
+        post_id = self.kwargs['pk']
         post = get_object_or_404(Post, pk=post_id)
         # Connect the comment to the post 
         form.instance.post = post
@@ -125,7 +125,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
