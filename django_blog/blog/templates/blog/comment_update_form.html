@@ -1,0 +1,18 @@
+<!-- templates/blog/comment_update_form.html -->
+{% extends "blog/base.html" %}
+
+{% block title %}Update Comment{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <h3>Update comment</h3>
+        <section class="content">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Update Comment</button>
+            </form>
+        </section>
+    </div>
+
+{% endblock %}

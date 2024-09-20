@@ -12,6 +12,8 @@
             <section class="content">
                 <p>{{ comment.content }}</p>
                 <small>By {{ comment.author }} on {{ comment.created_at }}</small>
+                <a href="{% url 'edit_comment' comment.id %}">Edit Comment</a>
+                <a href="{% url 'delete_comment' comment.id %}">Delete Comment</a>
             </section>
         {% empty %}
             <p>No comments yet.</p>

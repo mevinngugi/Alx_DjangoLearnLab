@@ -1,0 +1,23 @@
+<!-- templates/blog/comment_confirm_delete.html -->
+{% extends "blog/base.html" %}
+
+{% block title %}Delete Comment{% endblock %}
+
+{% block content %}
+    <div class="content">
+
+        <section class="content">
+            <form method="POST">
+                {% csrf_token %}
+                <p>Are you sure you want to delete "{{ object }}"?</p>
+                {{ form.as_p }}
+                <input type="submit" value="Confirm">
+            </form>
+        </section>
+
+        <section class="content">
+            <a href="{% url 'posts'%}"> Back to all blog posts </a>
+        </section>
+        
+    </div>
+{% endblock %}

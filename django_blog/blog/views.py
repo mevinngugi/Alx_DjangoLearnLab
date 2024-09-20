@@ -126,3 +126,40 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
+
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentCreateForm
+    # Leaving out the template name for now to see if it will pick the create comment template instead of update
+    template_name = 'blog/comment_update_form.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        # Only allow super user and the owner of the comment to edit comment
+        if self.request.user.is_superuser:
+            return True
+        elif self.request.user.id == comment.author_id:
+            return True
+
+    def get_success_url(self):
+        comment = self.get_object()
+        post_id = comment.post.id
+        return reverse_lazy('post_detail', kwargs={'pk': post_id})
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+
+    def test_func(self):
+        comment = self.get_object()
+        # Only allow super user and the owner of the comment to edit comment
+        if self.request.user.is_superuser:
+            return True
+        elif self.request.user.id == comment.author_id:
+            return True
+
+    def get_success_url(self):
+        comment = self.get_object()
+        post_id = comment.post.id
+        return reverse_lazy('post_detail', kwargs={'pk': post_id})
