@@ -101,7 +101,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    form_class = CommentCreateForm
+    form_class = CommentForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -130,7 +130,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
-    form_class = CommentCreateForm
+    form_class = CommentForm
     # Leaving out the template name for now to see if it will pick the create comment template instead of update
     template_name = 'blog/comment_update_form.html'
 
