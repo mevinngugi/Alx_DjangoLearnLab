@@ -40,4 +40,7 @@ urlpatterns = [
     # Delete Comment View
     path('comment/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='delete_comment'),
 
+    # Search View
+    path("search/", views.SearchResultsView.as_view(), name="search_results"),
+
 ]

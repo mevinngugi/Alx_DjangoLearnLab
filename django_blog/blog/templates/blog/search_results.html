@@ -1,11 +1,11 @@
-<!-- templates/blog/posts.html -->
+<!-- templates/blog/search_results.html -->
 {% extends "blog/base.html" %}
 
-{% block title %}Posts{% endblock %}
+{% block title %}Search Results{% endblock %}
 
 {% block content %}
     <div class="content">
-        <h2>A list of all the blog posts</h2>
+        <h2>Search Results</h2>
             <ul>
                 {% for post in post_list %}
                     <li class="content">
@@ -19,11 +19,11 @@
                                 <small>Untagged.</small>
                             {% endfor %}
                     </li>
+                {% empty %}
+                    <h3>No posts found</h3>
                 {% endfor %}
             </ul>
         <a href="{% url 'post_new'%}"> Create a new blog post</a>
-        <form action="{% url 'search_results' %}" method="get">
-        <input name="q" type="text" placeholder="Search...">
-        </form>
+        <a href="{% url 'posts'%}"> Back to all blog posts</a>
     </div>
 {% endblock %}

@@ -8,6 +8,7 @@ from .models import Post, Comment
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
+from django.db.models import Q 
 
 # Create your views here.
 def register(request):
@@ -163,3 +164,15 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         comment = self.get_object()
         post_id = comment.post.id
         return reverse_lazy('post_detail', kwargs={'pk': post_id})
+
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    #queryset = Post.objects.filter(title__icontains='blog')
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        post_list = Post.objects.filter(
+            Q(title__icontains=query) | Q(tags__name__icontains=query)
+        )
+        return post_list
