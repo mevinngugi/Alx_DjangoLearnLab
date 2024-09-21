@@ -178,3 +178,15 @@ class SearchResultsView(ListView):
             Q(tags__name__icontains=query)
         )
         return post_list
+
+# Not hooked up in the html page
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    #queryset = Post.objects.filter(title__icontains='blog')
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        post_list = Post.objects.filter(
+            Q(tags__name__icontains=query)
+        )
+        return post_list

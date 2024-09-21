@@ -43,4 +43,7 @@ urlpatterns = [
     # Search View
     path("search/", views.SearchResultsView.as_view(), name="search_results"),
 
+    # Post by tags View
+    path("search/", views.PostByTagListView.as_view(), name="post_by_tags_search_results"),
+
 ]
