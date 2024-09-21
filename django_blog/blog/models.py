@@ -42,3 +42,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.content} posted on {self.created_at}'
+
+
+class Tag(models.Model):
+    name = models.ManyToManyField(Post)
+
+    def __str__(self):
+        return f'{self.name}'
