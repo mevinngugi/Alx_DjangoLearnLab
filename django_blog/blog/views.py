@@ -173,6 +173,8 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         post_list = Post.objects.filter(
-            Q(title__icontains=query) | Q(tags__name__icontains=query)
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
         )
         return post_list
