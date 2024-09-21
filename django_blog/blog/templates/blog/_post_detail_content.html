@@ -1,6 +1,12 @@
 <!-- templates/blog/_post_detail_content.html -->
 <div class="content">
     <h2>{{ post.title }}</h2>
+        <small> Tags:  </small>
+        {% for tag in post.tags.all %}
+            <small> {{ tag }}, </small>
+        {% empty %}
+            <small>Untagged.</small>
+        {% endfor %}
     <section class="content">
         <p>{{ post.content }}</p>
         <small> Posted by {{ post.author }} on {{ post.published_date }}</small>

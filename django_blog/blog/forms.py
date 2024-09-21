@@ -28,14 +28,14 @@ class ProfileUpdateForm(forms.ModelForm):
 class PostCreateForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
 
 # I could have probably reused the PostCreateForm
 # But in the case where you don't want to update the same fields as create form
 class PostUpdateForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
 
 class CommentForm(forms.ModelForm):
     class Meta:

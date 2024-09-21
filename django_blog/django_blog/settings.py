@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,6 @@ LOGIN_REDIRECT_URL = 'home'
 
 # Redirect after @login_required
 LOGIN_URL = 'login'
+
+# django-taggit to be case insensitive
+TAGGIT_CASE_INSENSITIVE = True

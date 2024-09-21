@@ -12,6 +12,12 @@
                         <a href="{% url 'post_detail' post.id %}">
                             {{ post.title }} by {{ post.author }} on {{ post.published_date }}
                         </a>
+                        <small> Tags:  </small>
+                            {% for tag in post.tags.all %}
+                            <small> {{ tag }}, </small>
+                            {% empty %}
+                                <small>Untagged.</small>
+                            {% endfor %}
                     </li>
                 {% endfor %}
             </ul>
