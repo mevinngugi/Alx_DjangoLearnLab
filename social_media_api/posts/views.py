@@ -81,8 +81,8 @@ class UserFeedView(generics.GenericAPIView):
     def get(self, request):
         # current_user = request.user
         # import pdb; pdb.set_trace()
-        following = request.user.following.all()
-        posts = Post.objects.filter(author__in=following).order_by('-created_at')
+        following_users = request.user.following.all()
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
 
         if not posts:
             return Response({'status': 'error', 'message': 'Nothing to display. You are not following anyone.'}, status=status.HTTP_200_OK)
