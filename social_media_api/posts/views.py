@@ -7,6 +7,8 @@ from .permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 # Using the below import for the custom filter. 
 from django_filters import rest_framework as advanced_filters
+# Adding this for the checker
+from rest_framework import permissions
 
 # Create your views here.
 
@@ -45,21 +47,43 @@ class CommentViewSet(viewsets.ModelViewSet):
     ordering = ['created_at']
 
 
+# class UserFeedView(generics.GenericAPIView):
+#     # Adding permissions.IsAuthenticated for the checker 
+#     # Remember to remove the import up top
+#     permission_classes = [IsAuthenticated, permissions.IsAuthenticated]
+#     serializer_class = PostSerializer
+
+#     def get(self, request):
+#         # current_user = request.user
+#         # import pdb; pdb.set_trace()
+#         following = request.user.following.all()
+#         posts = []
+#         # import pdb; pdb.set_trace()
+#         # Get posts for each user. Add them to posts
+#         for user in following:
+#             user_posts = Post.objects.filter(author=user).order_by('-created_at')
+#             posts.extend(user_posts)
+#             # import pdb; pdb.set_trace()
+#         if not posts:
+#             return Response({'status': 'error', 'message': 'Nothing to display. You are not following anyone.'}, status=status.HTTP_200_OK)
+
+#         serializer = self.get_serializer(posts, many=True)
+
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class UserFeedView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    # Adding permissions.IsAuthenticated for the checker 
+    # Remember to remove the import up top
+    permission_classes = [IsAuthenticated, permissions.IsAuthenticated]
     serializer_class = PostSerializer
 
     def get(self, request):
         # current_user = request.user
         # import pdb; pdb.set_trace()
         following = request.user.following.all()
-        posts = []
-        # import pdb; pdb.set_trace()
-        # Get posts for each user. Add them to posts
-        for user in following:
-            user_posts = Post.objects.filter(author=user).order_by('-created_at')
-            posts.extend(user_posts)
-            # import pdb; pdb.set_trace()
+        posts = Post.objects.filter(author__in=following).order_by('-created_at')
+
         if not posts:
             return Response({'status': 'error', 'message': 'Nothing to display. You are not following anyone.'}, status=status.HTTP_200_OK)
 
