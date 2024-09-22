@@ -46,23 +46,37 @@ class LoginCustomUserView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
-        user_to_follow = get_object_or_404(CustomUser, id=user_id)
-        if user_to_follow != request.user:
+        # Get the first instance that match from the queryset. If not, user does not exist
+        user_to_follow = CustomUser.objects.all().filter(id=user_id).first()
+
+        if user_to_follow:
+            # Check if object in following queryset
+            if user_to_follow in request.user.following.all():
+                import pdb; pdb.set_trace()
+                return Response({'status': 'error', 'message': f'You already follow {user_to_follow.username}'}, status=status.HTTP_200_OK)
+            
             request.user.following.add(user_to_follow)
-            return Response({'status': 'success', 'message': f'You are now following {user_to_follow.username}'}, status=status.HTTP_200_OK)
-        return Response({'status': 'error', 'message': 'An error occurred.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 'success', 'message': f'You have successfully followed {user_to_follow.username}'}, status=status.HTTP_200_OK)
+
+        return Response({'status': 'error', 'message': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
-        user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
-        if user_to_unfollow in request.user.following.all():
+        user_to_unfollow = CustomUser.objects.all().filter(id=user_id).first()
+
+        if user_to_unfollow:  # Check if the user exists
+            if user_to_unfollow not in request.user.following.all():
+                #import pdb; pdb.set_trace()
+                return Response({'status': 'error', 'message': f'You do not follow {user_to_unfollow.username}'}, status=status.HTTP_200_OK)
+            
             request.user.following.remove(user_to_unfollow)
-            return Response({'status': 'success', 'message': f'You have successfully unfollowed {user_to_unfollow}'}, status=status.HTTP_200_OK)
-        return Response({'status': 'error', 'message': 'An error occurred.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 'success', 'message': f'You have successfully unfollowed {user_to_unfollow.username}'}, status=status.HTTP_200_OK)
+
+        return Response({'status': 'error', 'message': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
