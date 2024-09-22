@@ -133,3 +133,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Tell Django about the custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # Add any other authentication classes you might need
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        # Any other permissions you might want to set globally
+    ]
+}
