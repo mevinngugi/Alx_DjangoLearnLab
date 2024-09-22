@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'accounts',
     'posts',
 ]
@@ -134,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Tell Django about the custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-
+# Handle Auth and Perms 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -145,4 +146,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
         # Any other permissions you might want to set globally
     ]
+}
+
+
+# Global level filters
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
+    'rest_framework.filters.SearchFilter',
+    'rest_framework.filters.OrderingFilter']
 }
