@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import CustomUser
-from .serializer import CustomUserSerializer
+from .serializers import CustomUserSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 
