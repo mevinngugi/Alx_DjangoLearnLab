@@ -90,3 +90,11 @@ class UserFeedView(generics.GenericAPIView):
         serializer = self.get_serializer(posts, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class LikePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        # Pass for now 
+        pass
