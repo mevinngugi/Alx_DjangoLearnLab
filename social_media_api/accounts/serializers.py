@@ -65,6 +65,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
 class LoginUserSerializer(serializers.Serializer):
-    username = serializers.CharField(allow_blank=False)
-    password = serializers.CharField(allow_blank=False)
+    username = serializers.CharField()
+    password = serializers.CharField()
 
