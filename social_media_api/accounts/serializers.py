@@ -64,3 +64,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return user
 
+class LoginUserSerializer(serializers.Serializer):
+    username = serializers.CharField(allow_blank=False)
+    password = serializers.CharField(allow_blank=False)
+
