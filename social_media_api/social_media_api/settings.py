@@ -135,29 +135,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Tell Django about the custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# Handle Auth and Perms 
+# Custom Configs 
 REST_FRAMEWORK = {
+    # Global Auth and Perms
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        # Add any other authentication classes you might need
-    ],
+        ],
+
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        # Any other permissions you might want to set globally
-    ]
-}
+        ],
 
+    # Global filter, search and ordering
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+        ],
 
-# Global level filters
-REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
-    'rest_framework.filters.SearchFilter',
-    'rest_framework.filters.OrderingFilter']
-}
-
-# Handle Pagination
-REST_FRAMEWORK = {
+    # Global pagination
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 1
 }

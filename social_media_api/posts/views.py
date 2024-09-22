@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 # Using the below import for the custom filter. 
 from django_filters import rest_framework as advanced_filters
 
@@ -19,7 +20,8 @@ class PostListFilter(advanced_filters.FilterSet):
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    # Currently no one is able to get, put, post, delete if they don't have a token
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticated]
     model = Post
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -31,7 +33,8 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    # Currently no one is able to get, put, post, delete if they don't have a token
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticated]
     model = Comment
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
