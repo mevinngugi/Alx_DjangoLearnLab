@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, generics, status
+from rest_framework.response import Response
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
@@ -42,3 +43,26 @@ class CommentViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
     # This will be the default ordering filter
     ordering = ['created_at']
+
+
+class UserFeedView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get(self, request):
+        # current_user = request.user
+        # import pdb; pdb.set_trace()
+        following = request.user.following.all()
+        posts = []
+        # import pdb; pdb.set_trace()
+        # Get posts for each user. Add them to posts
+        for user in following:
+            user_posts = Post.objects.filter(author=user).order_by('-created_at')
+            posts.extend(user_posts)
+            # import pdb; pdb.set_trace()
+        if not posts:
+            return Response({'status': 'error', 'message': 'Nothing to display. You are not following anyone.'}, status=status.HTTP_200_OK)
+
+        serializer = self.get_serializer(posts, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
