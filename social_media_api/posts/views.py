@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -92,9 +92,31 @@ class UserFeedView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class LikePostView(APIView):
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    # serializer_class = LikePostSerializer
+
+    def post(self, request, pk):
+        # serializer = self.get_serializer(data=request.data)
+        post = get_object_or_404(Post, pk=pk)
+        already_liked_post = Like.objects.filter(post=post, user=request.user)
+
+        if already_liked_post:
+            return Response({f'error':'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        Like.objects.create(post=post, user=request.user)
+        return Response({'message': 'You have liked this post.'})
+
+
+class UnLikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        # Pass for now 
-        pass
+        post = get_object_or_404(Post, pk=pk)
+        already_liked_post = Like.objects.filter(post=post, user=request.user)
+
+        if already_liked_post:
+            already_liked_post.delete()
+            return Response({'message': 'You have unliked this post.'})
+
+        return Response({f'error':'You need to have liked a post before unliking it.'}, status=status.HTTP_400_BAD_REQUEST)

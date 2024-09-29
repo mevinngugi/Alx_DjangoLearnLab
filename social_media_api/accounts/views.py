@@ -59,7 +59,7 @@ class FollowUserView(generics.GenericAPIView):
             # Check if object in following queryset
             # Remember to check if user_to_follow == request.user because you can't follow yourself
             if user_to_follow in request.user.following.all():
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 return Response({'status': 'error', 'message': f'You already follow {user_to_follow.username}'}, status=status.HTTP_200_OK)
             
             request.user.following.add(user_to_follow)
