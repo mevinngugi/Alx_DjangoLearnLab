@@ -15,4 +15,4 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Notification {self.id} created'
+        return f'Notification: {self.actor} {self.verb} {self.recipient}\'s {self.content_type.model} id {self.object_id} '

@@ -9,6 +9,9 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from django_filters import rest_framework as advanced_filters
 # Adding this for the checker
 from rest_framework import permissions
+from notifications.models import Notification
+# Adding this to create a notification when a post is liked
+from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 
@@ -99,13 +102,22 @@ class LikePostView(generics.GenericAPIView):
     def post(self, request, pk):
         # serializer = self.get_serializer(data=request.data)
         post = get_object_or_404(Post, pk=pk)
-        already_liked_post = Like.objects.filter(post=post, user=request.user)
+        liked, created = Like.objects.get_or_create(user=request.user, post=post)
 
-        if already_liked_post:
+        if created:
+            Notification.objects.create(
+                recipient = post.author,
+                actor = request.user,
+                # Consider adding choices for like, comment
+                verb = 'liked',
+                content_type = ContentType.objects.get_for_model(post),
+                object_id = post.id,
+            )
+            return Response({'message': 'You have liked this post.'}, status=status.HTTP_201_CREATED)
+        elif liked:
             return Response({f'error':'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        Like.objects.create(post=post, user=request.user)
-        return Response({'message': 'You have liked this post.'})
+        else:
+            return Response({f'error':'There was an error trying to like a post'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UnLikePostView(generics.GenericAPIView):
