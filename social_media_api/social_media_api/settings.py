@@ -22,10 +22,43 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-$&hi(t#-#qu9*q++#a*7jbs(9vd53mi!l*%5mcxs!$&p%pub_h'
 
+#####################################################
+# When Deploying to production, turn these on       #
+#####################################################
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True  # Enables the X-XSS-Protection header
+    X_FRAME_OPTIONS = 'DENY'  # Prevents clickjacking by disallowing your site in iframes
+    SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME type sniffing
+    CSRF_COOKIE_SECURE = True  # Ensures the CSRF cookie is only sent over HTTPS
+    SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+    SECURE_HSTS_PRELOAD = True  # Preload site in browsers' HSTS lists
+    SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+    CSP_DEFAULT_SRC = ("'self'",)  # Only allow resources from your own domain
+    CSP_SCRIPT_SRC = ("'self'", 'https://trustedscripts.com')
+    CSP_STYLE_SRC = ("'self'", 'https://trustedstyles.com')
+else:
+    # Use HTTP settings for local development
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    SECURE_HSTS_SECONDS = 0  # No HSTS during development
+
+#####################################################
+# End of prod configs                               #
+#####################################################
+
+ALLOWED_HOSTS = [
+    'https://7vx5w0zk27.execute-api.us-east-1.amazonaws.com/dev/',
+    '7vx5w0zk27.execute-api.us-east-1.amazonaws.com/dev/',
+    '7vx5w0zk27.execute-api.us-east-1.amazonaws.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
