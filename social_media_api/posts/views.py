@@ -101,7 +101,9 @@ class LikePostView(generics.GenericAPIView):
 
     def post(self, request, pk):
         # serializer = self.get_serializer(data=request.data)
-        post = get_object_or_404(Post, pk=pk)
+        # Changing this for the checker 
+        #post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         liked, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if created:
